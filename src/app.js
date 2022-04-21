@@ -32,8 +32,15 @@ app.post('/sign-up', (req, res) => {
     }
 });
 
+app.post('/tweets', (req, res) => {
+    const { username, tweet } = req.body;
+    const avatar = users.find((user) => user.username === username).avatar;
+    tweets.push({ username, avatar, tweet });
+    res.status(201).send('OK');
+});
+
 app.get('/tweets', (req, res) => {
-    res.status(200).send(tweets.slice(-10));
+    res.status(200).send(tweets.slice(-10).reverse());
 });
 
 app.listen(5000, () => {
