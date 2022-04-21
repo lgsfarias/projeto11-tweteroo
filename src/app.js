@@ -37,25 +37,32 @@ app.post('/sign-up', (req, res) => {
 });
 
 app.post('/tweets', (req, res) => {
-    // console.log(req.headers);
     const { tweet } = req.body;
     const username = req.headers.user;
     if (!username || !tweet) {
         res.status(400).send('Todos os campos são obrigatórios!');
     } else {
         const avatar = users.find((user) => user.username === username).avatar;
-        tweets.push({ username, avatar, tweet });
+        tweets.unshift({ username, avatar, tweet });
         res.status(201).send('OK');
     }
 });
 
 app.get('/tweets', (req, res) => {
-    res.status(200).send(tweets.slice(-10).reverse());
+    const { page } = req.query;
+    if (page <= 0) {
+        res.status(400).send('Informe uma página válida!');
+    } else {
+        const limit = 10;
+        const tweetsToSend = tweets.slice((page - 1) * limit, page * limit);
+        res.status(200).send(tweetsToSend);
+    }
 });
 
 app.get('/tweets/:user', (req, res) => {
     const { user } = req.params;
     const tweetsUser = tweets.filter((tweet) => tweet.username === user);
+    // .reverse();
     res.status(200).send(tweetsUser);
 });
 
