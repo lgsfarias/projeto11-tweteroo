@@ -53,6 +53,12 @@ app.get('/tweets', (req, res) => {
     res.status(200).send(tweets.slice(-10).reverse());
 });
 
+app.get('/tweets/:user', (req, res) => {
+    const { user } = req.params;
+    const tweetsUser = tweets.filter((tweet) => tweet.username === user);
+    res.status(200).send(tweetsUser);
+});
+
 app.listen(5000, () => {
     console.log(chalk.bold.green('Server is running on port 5000'));
 });
