@@ -32,6 +32,10 @@ app.post('/sign-up', (req, res) => {
     }
 });
 
+app.get('/tweets', (req, res) => {
+    res.status(200).send(tweets.slice(-10));
+});
+
 app.listen(5000, () => {
     console.log(chalk.bold.green('Server is running on port 5000'));
 });
