@@ -21,6 +21,10 @@ const tweets = [
     },
 ];
 
+function reverse(arr) {
+    return arr.slice().reverse();
+}
+
 app.post('/sign-up', (req, res) => {
     const { username, avatar } = req.body;
     if (!username || !avatar) {
@@ -43,7 +47,7 @@ app.post('/tweets', (req, res) => {
         res.status(400).send('Todos os campos são obrigatórios!');
     } else {
         const avatar = users.find((user) => user.username === username).avatar;
-        tweets.unshift({ username, avatar, tweet });
+        tweets.push({ username, avatar, tweet });
         res.status(201).send('OK');
     }
 });
@@ -54,18 +58,24 @@ app.get('/tweets', (req, res) => {
         res.status(400).send('Informe uma página válida!');
     } else {
         const limit = 10;
-        const tweetsToSend = tweets.slice((page - 1) * limit, page * limit);
+        const tweetsToSend = reverse(tweets).slice(
+            (page - 1) * limit,
+            page * limit
+        );
         res.status(200).send(tweetsToSend);
     }
 });
 
 app.get('/tweets/:user', (req, res) => {
     const { user } = req.params;
-    const tweetsUser = tweets.filter((tweet) => tweet.username === user);
-    // .reverse();
+    const tweetsUser = reverse(tweets).filter(
+        (tweet) => tweet.username === user
+    );
     res.status(200).send(tweetsUser);
 });
 
 app.listen(5000, () => {
-    console.log(chalk.bold.green('Server is running on port 5000'));
+    console.log(
+        chalk.bold.green('Server is running on: http://localhost:5000')
+    );
 });
